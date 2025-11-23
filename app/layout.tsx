@@ -1,7 +1,6 @@
-"use client";
-
-import { HeroUIProvider } from "@heroui/react";
+import { UserProvider } from "./contexts/UserContext";
 import "./global.css";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
@@ -9,10 +8,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <HeroUIProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </HeroUIProvider>
+    <html suppressHydrationWarning lang="en">
+      <body>
+        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <UserProvider>{children}</UserProvider>
+        </Providers>
+      </body>
+    </html>
   );
 }

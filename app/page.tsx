@@ -1,11 +1,14 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/react";
+import "./global.css";
+import Styleguide from "./components/Styleguide";
+import HeaderNav from "./components/HeaderNav";
 
 export default function Page() {
   return (
-    <Card>
-      <CardBody>Hello world</CardBody>
-    </Card>
+    <>
+      <HeaderNav />
+      <Styleguide />
+    </>
   );
 }
