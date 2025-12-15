@@ -1,23 +1,15 @@
-"use client";
-
 import { FC } from "react";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
-import clsx from "clsx";
-import { Switch, SwitchProps, useSwitch } from "@heroui/react";
+import { Switch } from "@heroui/react";
 import SunIcon from "./SunIcon";
 import MoonIcon from "./MoonIcon";
 
 export interface ThemeSwitchProps {
   className?: string;
-  classNames?: SwitchProps["classNames"];
 }
 
-export const ThemeSwitch: FC<ThemeSwitchProps> = ({
-  className,
-  classNames,
-}) => {
+export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className }) => {
   const { theme, setTheme } = useTheme();
   const isSSR = useIsSSR();
 
@@ -25,62 +17,33 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
     theme === "light" ? setTheme("dark") : setTheme("light");
   };
 
-  const {
-    Component,
-    slots,
-    isSelected,
-    getBaseProps,
-    getInputProps,
-    getWrapperProps,
-  } = useSwitch({
-    isSelected: theme === "light" || isSSR,
-    "aria-label": `Switch to ${
-      theme === "light" || isSSR ? "dark" : "light"
-    } mode`,
-    onChange,
-  });
-
   return (
-    <Component
-      {...getBaseProps({
-        className: clsx(
-          "px-px transition-opacity hover:opacity-80 cursor-pointer",
-          className,
-          classNames?.base,
-        ),
-      })}
-    >
-      <VisuallyHidden>
-        <input {...getInputProps()} />
-      </VisuallyHidden>
-      <div
-        {...getWrapperProps()}
-        className={slots.wrapper({
-          class: clsx(
-            [
-              "w-auto h-auto",
-              "bg-transparent",
-              "rounded-lg",
-              "flex items-center justify-center",
-              "group-data-[selected=true]:bg-transparent",
-              "!text-default-500",
-              "pt-px",
-              "px-0",
-              "mx-0",
-            ],
-            classNames?.wrapper,
-          ),
-        })}
-      >
-        <Switch
-          isSelected={isSelected || isSSR}
-          onChange={onChange}
-          defaultSelected
-          endContent={<SunIcon />}
-          size="lg"
-          startContent={<MoonIcon />}
-        />
+    <>
+      <div>
+        <Switch onChange={onChange} isSelected={isSSR || theme === "dark"}>
+          {({ isSelected }) => (
+            <>
+              <Switch.Control
+                className={`h-[31px] w-[51px] bg-black-500 ${
+                  isSelected
+                    ? "bg-black-500 shadow-[0_0_12px_rgba(6,182,212,0.5)]"
+                    : ""
+                }`}
+              >
+                <Switch.Thumb
+                  className={`size-[27px] bg-white shadow-sm ${
+                    isSelected ? "ms-[22px] shadow-lg" : ""
+                  }`}
+                >
+                  <Switch.Icon>
+                    {isSelected ? <MoonIcon /> : <SunIcon />}
+                  </Switch.Icon>
+                </Switch.Thumb>
+              </Switch.Control>
+            </>
+          )}
+        </Switch>
       </div>
-    </Component>
+    </>
   );
 };
